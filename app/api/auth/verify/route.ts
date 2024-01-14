@@ -1,14 +1,28 @@
-import { verifyCsrf } from "@/libs/auth";
+import { Payload } from "@/libs/auth";
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
-interface Payload {
-  exp: number;
-  iat: number;
-  id: string;
-}
+import { cookies, headers } from "next/headers";
 
 export function GET() {
-  verifyCsrf();
+  const headerList = headers();
+  const headerCsrf = headerList.get("x-token-csrf");
+  if (!headerCsrf) {
+    return Response.json(
+      { error: "CSRF token does not exist in header." },
+      { status: 403 }
+    );
+  }
+
+  const cookieCsrf = cookies().get("csrf");
+  if (!cookieCsrf) {
+    return Response.json(
+      { error: "CSRF token does not exist in cookie." },
+      { status: 403 }
+    );
+  }
+
+  if (headerCsrf !== cookieCsrf.value) {
+    return Response.json({ error: "CSRF token mismatch." }, { status: 403 });
+  }
 
   const cookieSession = cookies().get("session");
   if (!cookieSession) {
