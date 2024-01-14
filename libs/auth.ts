@@ -1,3 +1,5 @@
+"use server";
+
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
@@ -13,7 +15,8 @@ export async function getUser() {
     jwt.verify(token, process.env.JWT_SECRET);
 
     // TODO: Fetch user from database
-    const user = { id: 2 };
+    const user = { id: 2, time: Date.now(), random: Math.random() };
+    await new Promise((resolve) => setTimeout(resolve, 100));
     return user;
   } catch (error) {
     return null;
