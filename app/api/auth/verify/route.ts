@@ -1,6 +1,6 @@
+import { verifyCsrf } from "@/libs/auth";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-
 interface Payload {
   exp: number;
   iat: number;
@@ -8,11 +8,10 @@ interface Payload {
 }
 
 export function GET() {
-  // Get token from cookie
-  const cookieStore = cookies();
-  const cookieCsrf = cookieStore.get("csrf");
-  const cookieSession = cookieStore.get("session");
-  if (!cookieCsrf || !cookieSession) {
+  verifyCsrf();
+
+  const cookieSession = cookies().get("session");
+  if (!cookieSession) {
     return Response.json({ error: "Token does not exist." }, { status: 400 });
   }
 
