@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 
 export function POST() {
-  cookies().delete("token");
+  const cookieStore = cookies();
+  cookieStore.delete("csrf");
+  cookieStore.delete("session");
   return Response.json({ success: "Cookie token has been deleted." });
 }

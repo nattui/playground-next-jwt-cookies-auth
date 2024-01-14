@@ -9,15 +9,17 @@ interface Payload {
 
 export function GET() {
   // Get token from cookie
-  const cookieToken = cookies().get("token");
-  if (!cookieToken) {
+  const cookieStore = cookies();
+  const cookieCsrf = cookieStore.get("csrf");
+  const cookieSession = cookieStore.get("session");
+  if (!cookieCsrf || !cookieSession) {
     return Response.json({ error: "Token does not exist." }, { status: 400 });
   }
 
   try {
     // Verify JWT token
-    const token = cookieToken.value;
-    const payload = jwt.verify(token, process.env.JWT_SECRET) as Payload;
+    const session = cookieSession.value;
+    const payload = jwt.verify(session, process.env.JWT_SECRET) as Payload;
     const user = { id: payload.id, time: Date.now(), random: Math.random() };
     return Response.json(user);
   } catch (error) {
