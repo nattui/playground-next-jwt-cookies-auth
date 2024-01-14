@@ -10,10 +10,9 @@ interface Payload {
 export function GET() {
   // Get token from cookie
   const cookieStore = cookies();
-  const cookieCsrf = cookieStore.get("csrf");
   const cookieSession = cookieStore.get("session");
-  if (!cookieCsrf || !cookieSession) {
-    return Response.json({ error: "Token does not exist." }, { status: 400 });
+  if (!cookieSession) {
+    return Response.json({ error: "Session does not exist." }, { status: 400 });
   }
 
   try {
