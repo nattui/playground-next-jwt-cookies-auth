@@ -1,6 +1,7 @@
 import ButtonSignIn from "@/components/button-sign-in";
 import ButtonSignOut from "@/components/button-sign-out";
 import { getUser } from "@/libs/auth";
+import { cookies } from "next/headers";
 
 export default async function HomePage() {
   const user = await getUser();
@@ -18,7 +19,11 @@ export default async function HomePage() {
         User is {user ? "authenticated" : "unauthenticated"}
       </p>
 
-      {user ? <ButtonSignOut /> : <ButtonSignIn />}
+      {user ? (
+        <ButtonSignOut csrf={cookies().get("csrf")?.value} />
+      ) : (
+        <ButtonSignIn />
+      )}
     </main>
   );
 }

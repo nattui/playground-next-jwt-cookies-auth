@@ -3,12 +3,19 @@
 import { api } from "@/libs/constants";
 import { useRouter } from "next/navigation";
 
-export default function ButtonSignOut() {
+interface Props {
+  csrf: string | undefined;
+}
+
+export default function ButtonSignOut({ csrf = "" }: Props) {
   const router = useRouter();
 
   async function handleClick() {
     try {
-      const response = await fetch(api.signout, { method: "POST" });
+      const response = await fetch(api.signout, {
+        headers: { "x-token-csrf": csrf },
+        method: "POST",
+      });
       if (!response.ok) throw new Error("Unable to sign out.");
       router.refresh();
     } catch (error) {
