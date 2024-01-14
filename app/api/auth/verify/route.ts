@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
-import { NextRequest } from "next/server";
+import { cookies } from "next/headers";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   // Get token from cookie
-  const cookieToken = request.cookies.get("token");
+  const cookieToken = cookies().get("token");
   if (!cookieToken) {
     return Response.json({ error: "Token does not exist." }, { status: 400 });
   }
