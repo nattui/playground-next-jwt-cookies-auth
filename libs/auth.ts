@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 export async function getUser() {
   // Get token from cookie
@@ -22,8 +22,10 @@ export async function getUser() {
 }
 
 export async function getUser2() {
-  const headersList = headers();
-  const origin = headersList.get("referer");
+  const isDevelopment = process.env.NODE_ENV === "development";
+  const origin = isDevelopment
+    ? "http://localhost:3000"
+    : "https://study-next-custom-auth.vercel.app";
   const response = await fetch(`${origin}/api/auth/verify`, {
     headers: { Cookie: cookies().toString() },
   });
