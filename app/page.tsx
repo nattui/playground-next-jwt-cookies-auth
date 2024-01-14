@@ -1,3 +1,5 @@
+import ButtonSignIn from "@/components/button-sign-in";
+import ButtonSignOut from "@/components/button-sign-out";
 import { getUser } from "@/libs/auth";
 
 export default async function HomePage() {
@@ -11,6 +13,12 @@ export default async function HomePage() {
       <p className="text-white whitespace-pre font-mono text-sm">
         {Date.now()}
       </p>
+
+      <p className="text-white whitespace-pre font-mono text-sm mb-4">
+        User is {user ? "authenticated" : "unauthenticated"}
+      </p>
+
+      {user ? <ButtonSignOut /> : <ButtonSignIn />}
     </main>
   );
 }

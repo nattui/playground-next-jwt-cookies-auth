@@ -6,3 +6,8 @@ export const url = {
 };
 
 export const origin = isDevelopment ? url.development : url.production;
+
+export const api = {
+  signin: "/api/auth/signin",
+  signout: "/api/auth/signout",
+};
