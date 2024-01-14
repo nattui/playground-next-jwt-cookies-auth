@@ -1,5 +1,13 @@
-export default function HomePage() {
+import { getUser } from "@/libs/auth";
+
+export default async function HomePage() {
+  const user = await getUser();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
+    <main className="bg-black flex min-h-screen flex-col items-center p-24">
+      <p className="text-white whitespace-pre font-mono text-sm">
+        {JSON.stringify(user, null, 2)}
+      </p>
+    </main>
   );
 }
