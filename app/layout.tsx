@@ -1,5 +1,5 @@
 import "@/app/global.css";
-import { getUser2 } from "@/libs/auth";
+import { getUser } from "@/libs/auth";
 import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default async function RootLayout({ children }: Props) {
-  const user = await getUser2();
+  const user = await getUser();
 
   return (
     <html lang="en" className={inter.className}>

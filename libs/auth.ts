@@ -3,6 +3,14 @@ import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
 export async function getUser() {
+  const response = await fetch(`${origin}/api/auth/verify`, {
+    headers: { Cookie: cookies().toString() },
+  });
+  if (!response.ok) return;
+  return await response.json();
+}
+
+export async function getUserOld() {
   // Get token from cookie
   const cookieStore = cookies();
   const cookieToken = cookieStore.get("token");
@@ -20,12 +28,4 @@ export async function getUser() {
   } catch (error) {
     return null;
   }
-}
-
-export async function getUser2() {
-  const response = await fetch(`${origin}/api/auth/verify`, {
-    headers: { Cookie: cookies().toString() },
-  });
-  if (!response.ok) return;
-  return await response.json();
 }

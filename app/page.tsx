@@ -1,7 +1,7 @@
-import { getUser2 } from "@/libs/auth";
+import { getUser } from "@/libs/auth";
 
 export default async function HomePage() {
-  const user = await getUser2();
+  const user = await getUser();
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24">

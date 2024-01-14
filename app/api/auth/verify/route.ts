@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   // Get token from cookie
   const cookieToken = request.cookies.get("token");
   if (!cookieToken) {
-    return Response.json({ error: "Something went wrong." }, { status: 400 });
+    return Response.json({ error: "Token does not exist." }, { status: 400 });
   }
 
   // Verify JWT token
@@ -17,9 +17,6 @@ export async function GET(request: NextRequest) {
 
     return Response.json(user);
   } catch (error) {
-    return Response.json(
-      { error: "There was a verification error." },
-      { status: 400 }
-    );
+    return Response.json({ error: "Verification failed." }, { status: 400 });
   }
 }
