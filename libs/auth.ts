@@ -1,7 +1,5 @@
-"use server";
-
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 export async function getUser() {
   // Get token from cookie
@@ -15,10 +13,20 @@ export async function getUser() {
     jwt.verify(token, process.env.JWT_SECRET);
 
     // TODO: Fetch user from database
+    // await new Promise((resolve) => setTimeout(resolve, 100));
     const user = { id: 2, time: Date.now(), random: Math.random() };
-    await new Promise((resolve) => setTimeout(resolve, 100));
     return user;
   } catch (error) {
     return null;
   }
+}
+
+export async function getUser2() {
+  const headersList = headers();
+  const origin = headersList.get("referer");
+  const response = await fetch(`${origin}/api/auth/verify`, {
+    headers: { Cookie: cookies().toString() },
+  });
+  if (!response.ok) return;
+  return await response.json();
 }
