@@ -7,11 +7,13 @@ interface Props {
   csrf: string | undefined;
 }
 
-export default function ButtonSignOut({ csrf = "" }: Props) {
+export default function ButtonSignOut() {
   const router = useRouter();
 
   async function handleClick() {
     try {
+      const meta = document.querySelector("meta[name='csrf']");
+      const csrf = meta?.getAttribute("content") ?? "";
       const response = await fetch(api.signout, {
         headers: { "x-token-csrf": csrf },
         method: "POST",
