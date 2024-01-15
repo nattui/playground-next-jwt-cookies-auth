@@ -1,11 +1,11 @@
-import { origin } from "@/libs/constants";
+import { api, origin } from "@/libs/constants";
 import jwt from "jsonwebtoken";
 import { cookies, headers } from "next/headers";
 
 export async function getUser() {
   const cookieStore = cookies();
   const csrf = cookieStore.get("csrf")?.value ?? "";
-  const response = await fetch(`${origin}/api/auth/verify`, {
+  const response = await fetch(`${origin}${api.verify}`, {
     headers: {
       "x-token-csrf": csrf,
       Cookie: cookieStore.toString(),
