@@ -15,7 +15,7 @@ export default function ButtonSignOut() {
       const meta = document.querySelector("meta[name='csrf']");
       const csrf = meta?.getAttribute("content") ?? "";
       const response = await fetch(api.signout, {
-        headers: { "x-token-csrf": csrf },
+        headers: { "X-Token-Csrf": csrf },
         method: "POST",
       });
       if (!response.ok) throw new Error("Unable to sign out.");

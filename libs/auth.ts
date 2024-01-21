@@ -7,7 +7,7 @@ export async function getUser() {
   const csrf = cookieStore.get("csrf")?.value ?? "";
   const response = await fetch(`${origin}${api.verify}`, {
     headers: {
-      "x-token-csrf": csrf,
+      "X-Token-Csrf": csrf,
       Cookie: cookieStore.toString(),
     },
     cache: "force-cache",
@@ -18,7 +18,7 @@ export async function getUser() {
 
 export function verifyCsrf() {
   const headerList = headers();
-  const headerCsrf = headerList.get("x-token-csrf");
+  const headerCsrf = headerList.get("X-Token-Csrf");
   if (!headerCsrf) {
     return Response.json(
       { error: "CSRF token does not exist in header." },
