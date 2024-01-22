@@ -10,7 +10,6 @@ export async function getUser() {
       "X-Token-Csrf": csrf,
       Cookie: cookieStore.toString(),
     },
-    // cache: "force-cache",
   });
   if (!response.ok) return;
   return await response.json();
