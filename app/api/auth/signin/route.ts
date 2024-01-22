@@ -1,23 +1,38 @@
+import { secret } from "@/libs/auth";
 import crypto from "crypto";
-import jwt from "jsonwebtoken";
+import { SignJWT } from "jose";
 import { cookies } from "next/headers";
 
-export function POST() {
+interface Cookies {
+  priority: "high" | "low" | "medium" | undefined;
+  sameSite: boolean | "lax" | "strict" | "none" | undefined;
+}
+
+export async function POST() {
   const csrf = crypto.randomBytes(64).toString("hex");
 
   // TODO: Fake auth and returns user id
   const id = "1";
-  const session = jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: Number(process.env.JWT_EXPIRATION),
-  });
+
+  let session;
+  try {
+    session = await new SignJWT({ id })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("30d")
+      .sign(secret);
+  } catch (error) {
+    console.error(error);
+    return Response.json({ error: "Something went wrong." }, { status: 400 });
+  }
 
   const cookieStore = cookies();
   const defaults = {
     httpOnly: true,
     maxAge: Number(process.env.JWT_EXPIRATION),
     path: "/",
-    priority: "high" as "high" | "low" | "medium" | undefined,
-    sameSite: "lax" as boolean | "lax" | "strict" | "none" | undefined,
+    priority: "high" as Cookies["priority"],
+    sameSite: "lax" as Cookies["sameSite"],
     secure: true,
   };
   cookieStore.set({ ...defaults, name: "csrf", value: csrf });

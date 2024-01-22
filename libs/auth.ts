@@ -1,5 +1,5 @@
 import { api, origin } from "@/libs/constants";
-import jwt from "jsonwebtoken";
+import { base64url, jwtVerify } from "jose";
 import { cookies, headers } from "next/headers";
 
 export async function getUser() {
@@ -10,7 +10,7 @@ export async function getUser() {
       "X-Token-Csrf": csrf,
       Cookie: cookieStore.toString(),
     },
-    cache: "force-cache",
+    // cache: "force-cache",
   });
   if (!response.ok) return;
   return await response.json();
@@ -45,7 +45,9 @@ export interface Payload {
   id: string;
 }
 
-export function verifySession() {
+export const secret = base64url.decode(process.env.JWT_EXPIRATION);
+
+export async function verifySession() {
   const cookieSession = cookies().get("session");
   if (!cookieSession) {
     return Response.json({ error: "Token does not exist." }, { status: 400 });
@@ -54,7 +56,7 @@ export function verifySession() {
   try {
     // Verify JWT token
     const session = cookieSession.value;
-    const payload = jwt.verify(session, process.env.JWT_SECRET) as Payload;
+    const { payload } = await jwtVerify(session, secret);
     const user = { id: payload.id, time: Date.now(), random: Math.random() };
     return Response.json(user);
   } catch (error) {
