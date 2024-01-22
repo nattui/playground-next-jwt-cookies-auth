@@ -1,6 +1,6 @@
 import { secret } from "@/libs/auth";
-import crypto from "crypto";
 import { SignJWT } from "jose";
+import { nanoid } from "nanoid";
 import { cookies } from "next/headers";
 
 interface Cookies {
@@ -9,7 +9,7 @@ interface Cookies {
 }
 
 export async function POST() {
-  const csrf = crypto.randomBytes(64).toString("hex");
+  const csrf = nanoid();
 
   // TODO: Fake auth and returns user id
   const id = "1";
